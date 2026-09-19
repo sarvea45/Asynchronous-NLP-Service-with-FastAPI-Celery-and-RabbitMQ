@@ -128,6 +128,6 @@ Unit tests can be executed directly inside the containerized environment. We use
 
 ## 🎥 Video Demonstration
 
-[Watch the End-to-End Demo Video Here](INSERT_VIDEO_LINK_HERE)
+[Watch the End-to-End Demo Video Here](https://youtu.be/s91x7T6E1fc)
 
 *(The video demonstrates submitting a heavy NLP payload via Postman/curl, watching the queue in RabbitMQ, and polling for the final processed entity extraction output.)*
