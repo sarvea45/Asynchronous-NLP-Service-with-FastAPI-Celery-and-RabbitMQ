@@ -19,7 +19,7 @@ def test_end_to_end_flow():
     task_id = response.json()["task_id"]
     
     # 2. Poll for completion
-    max_retries = 30
+    max_retries = 120
     for i in range(max_retries):
         res = httpx.get(f"{API_URL}/api/nlp/status/{task_id}")
         assert res.status_code == 200

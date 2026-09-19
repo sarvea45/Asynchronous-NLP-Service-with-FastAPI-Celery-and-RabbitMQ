@@ -16,12 +16,16 @@ def test_process_text_task_success(mock_session_maker, mock_analyze, db_session)
     db_session.commit()
     
     # Run task synchronously
-    process_text_task(task.id)
-    
+    task_id = task.id
+    process_text_task(task_id)
+
     # Verify status changed
-    db_session.refresh(task)
-    assert task.status == "COMPLETED"
-    assert task.result == {"sentiment": "Mock Positive"}
+    from tests.conftest import TestingSessionLocal
+    test_db = TestingSessionLocal()
+    updated_task = test_db.query(NLPTask).get(task_id)
+    assert updated_task.status == "COMPLETED"
+    assert updated_task.result == {"sentiment": "Mock Positive"}
+    test_db.close()
 
 @patch("app.tasks.analyze_sentiment")
 @patch("app.tasks.SessionLocal")
@@ -33,8 +37,12 @@ def test_process_text_task_failure(mock_session_maker, mock_analyze, db_session)
     db_session.add(task)
     db_session.commit()
     
-    process_text_task(task.id)
+    task_id = task.id
+    process_text_task(task_id)
     
-    db_session.refresh(task)
-    assert task.status == "FAILED"
-    assert "Model exploded" in task.error_message
+    from tests.conftest import TestingSessionLocal
+    test_db = TestingSessionLocal()
+    updated_task = test_db.query(NLPTask).get(task_id)
+    assert updated_task.status == "FAILED"
+    assert "Model exploded" in updated_task.error_message
+    test_db.close()
